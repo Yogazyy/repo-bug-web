@@ -1,0 +1,61 @@
+body {
+  font-family: 'Orbitron', sans-serif;
+  background-color: #0a0a0a;
+  color: white;
+  text-align: center;
+  padding: 30px;
+}
+.box {
+  background: #111;
+  padding: 20px;
+  margin: auto;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #00ffcc66;
+}
+input {
+  width: 90%;
+  margin: 10px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+button {
+  padding: 10px 20px;
+  background-color: #00ffaa;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+#popup-message {
+  background: #333;
+  padding: 30px;
+  border-radius: 10px;
+}
+.bug-card {
+  background: #222;
+  display: inline-block;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.bug-card.active {
+  border: 2px solid #00ffaa;
+}
+#login-result, #result {
+  color: crimson;
+  margin-top: 10px;
+}

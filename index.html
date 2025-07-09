@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Msl News WebCrasher</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="popup" onclick="closePopup()">
+    <div id="popup-message"></div>
+  </div>
+
+  <!-- LOGIN BOX -->
+  <div id="login-box" class="box">
+    <h2>🔐 Dashboard Login Web</h2>
+    <input type="text" id="username" placeholder="Username"/><br/>
+    <input type="password" id="password" placeholder="Password"/><br/>
+    <button onclick="login()">Login</button>
+    <p id="login-result" style="color: red;"></p>
+  </div>
+
+  <!-- MAIN MENU -->
+  <div id="main-box" class="box" style="display:none;">
+    <h2>👤 Welcome <span id="userLabel"></span></h2>
+    <button onclick="logout()">Logout</button>
+
+    <h3 style="margin-top:30px;">💣 Select Bug Type</h3>
+    <div id="bug-options">
+      <div class="bug-card active" data-bug="crashtotal">Crash Total</div>
+      <div class="bug-card" data-bug="whatsappfreeze">WhatsApp Freeze</div>
+      <div class="bug-card" data-bug="loopstatus">Loop Status</div>
+    </div>
+
+    <h3 style="margin-top:30px;">🎯 Target</h3>
+    <input type="text" id="target" placeholder="628xxx"/><br/>
+    <button onclick="sendBug()" id="sendBtn">Kirim Bug</button>
+    <p id="result"></p>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
