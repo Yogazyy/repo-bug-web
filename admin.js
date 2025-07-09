@@ -20,7 +20,7 @@ function logout() {
 // Fetch User List from JSONBin
 async function getUsers() {
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/qs/${BIN_ID}/latest`, {
+    const res = await fetch(`https://api.jsonbin.io/v3/qs/${BIN_ID}`, {
       headers: { "X-Master-Key": API_KEY },
     });
     if (!res.ok) throw new Error("Fetch failed!");
