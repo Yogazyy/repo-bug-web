@@ -37,6 +37,39 @@
     <input type="text" id="target" placeholder="628xxx"/><br/>
     <button onclick="sendBug()" id="sendBtn">Kirim Bug</button>
     <p id="result"></p>
+
+    <h3 style="margin-top:30px;">👥 Manajemen Pengguna</h3>
+    <input type="text" id="newUser" placeholder="Username Baru"/><br/>
+    <input type="password" id="newPass" placeholder="Password Baru"/><br/>
+    <select id="newRole">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+      <option value="owner">Owner</option>
+    </select><br/>
+    <button onclick="addUser()">Tambah User</button>
+
+    <h3 style="margin-top:30px;">🔄 Ganti Role</h3>
+    <input type="text" id="targetUsername" placeholder="Username yang diubah"/>
+    <select id="newRoleChange">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+      <option value="owner">Owner</option>
+    </select><br/>
+    <button onclick="changeRole()">Ganti Role</button>
+    <p id="manage-result" style="color:lime;"></p>
+
+    <h3 style="margin-top:30px;">🔐 Ganti Password</h3>
+    <input type="password" id="oldPass" placeholder="Password Lama"/><br/>
+    <input type="password" id="newPass1" placeholder="Password Baru"/><br/>
+    <input type="password" id="newPass2" placeholder="Konfirmasi Password Baru"/><br/>
+    <button onclick="changePassword()">Ganti Password</button>
+    <p id="password-result" style="color:lime;"></p>
+
+    <h3 style="margin-top:30px;">➕ Tambah User (Default role: user)</h3>
+    <input type="text" id="simpleUsername" placeholder="Username Baru"/><br/>
+    <input type="password" id="simplePassword" placeholder="Password Baru"/><br/>
+    <button onclick="addSimpleUser()">Tambah User</button>
+    <p id="simple-result" style="color:lime;"></p>
   </div>
 
   <script src="admin.js"></script>
